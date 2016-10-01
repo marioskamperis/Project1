@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SuitApp</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+
+    <!--Menu Items-->
+    <string name="NavDrawerToday">Today\'s Proposal</string>
+    <string name="NavDrawerWardrobe">Wardrobe</string>
+    <string name="NavDrawerOutfits">Outfits</string>
+    <string name="NavDrawerPreferences">Dressing Preferences</string>
+    <string name="NavDrawerShopping">Go Shopping</string>
+    <string name="NavDrawerProfile">My Profile</string>
+    <string name="NavDrawerSettings">App Settings</string>
+    <string name="NavDrawerLogout">Logout</string>
+    <string name="NavDrawerShare">Share</string>
+    <string name="NavDrawerSend">Send</string>
+
+</resources>
