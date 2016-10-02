@@ -1,13 +1,20 @@
 package suitapp.com.marioskamperis.suitapp;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,12 +22,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link WardrobeFragment.OnFragmentInteractionListener} interface
+ * {@link WardrobeCategoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WardrobeFragment#newInstance} factory method to
+ * Use the {@link WardrobeCategoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WardrobeFragment extends Fragment {
+public class WardrobeCategoryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,7 +39,7 @@ public class WardrobeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public WardrobeFragment() {
+    public WardrobeCategoryFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +49,11 @@ public class WardrobeFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment WardrobeFragment.
+     * @return A new instance of fragment WardrobeCategoryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WardrobeFragment newInstance(String param1, String param2) {
-        WardrobeFragment fragment = new WardrobeFragment();
+    public static WardrobeCategoryFragment newInstance(String param1, String param2) {
+        WardrobeCategoryFragment fragment = new WardrobeCategoryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -70,15 +77,37 @@ public class WardrobeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_wardrobe, container, false);
 
         final ListView listview = (ListView) rootView.findViewById(R.id.wardrobe_listview);
-        String[] values = new String[] { "JACKET" , "SUIT" , "SHIRT","TROUSERS","SHOES","ACCESSORIES","OUTERWEAR"};
-
+        String[] values = AppConfig.CATEGORIES;
         final ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < values.length; ++i) {
             list.add(values[i]);
         }
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
+
+        final MySimpleArrayAdapter adapter = new MySimpleArrayAdapter(this.getActivity(), list);
+
         listview.setAdapter(adapter);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+                final String item = (String) parent.getItemAtPosition(position);
+                view.animate().setDuration(1000)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                list.remove(item);
+                                adapter.notifyDataSetChanged();
+                                view.setAlpha(1);
+                            }
+                        });
+                Toast.makeText(getActivity(), "Clicked category " + AppConfig.CATEGORIES[position], Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, new HomeFragment()).addToBackStack(null).commit();
+            }
+
+        });
+
 
         return rootView;
     }
@@ -120,5 +149,41 @@ public class WardrobeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class MySimpleArrayAdapter extends ArrayAdapter<String> {
+        private final Context context;
+        private final ArrayList<String> values;
+
+        public MySimpleArrayAdapter(Context context, ArrayList<String> values) {
+            super(context, -1, values);
+            this.context = context;
+            this.values = values;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View rowView = inflater.inflate(R.layout.wardrobe_list_item, parent, false);
+
+            TextView textView = (TextView) rowView.findViewById(R.id.wardrobe_clothing_element);
+
+            TextView addElement = (TextView) rowView.findViewById(R.id.wardrobe_clothing_element_add);
+
+
+            textView.setText(values.get(position));
+
+            addElement.setTag(position);
+            addElement.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getActivity(), "Add a : " + values.get((Integer) (v.getTag())), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            return rowView;
+        }
     }
 }

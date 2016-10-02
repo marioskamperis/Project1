@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity
             HomeFragment firstFragment = new HomeFragment();
 
             FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, new HomeFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new WardrobeCategoryFragment()).commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,13 +108,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_wardrobe) {
 
             Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
-            fragmentClass = (new WardrobeFragment()).getClass();
+//            fragmentClass = (new WardrobeCategoryFragment()).getClass();
 
+            fragmentClass = new WardrobeCategoryFragment().getClass();
 //            Bundle args = new Bundle();
 //            args.putInt(ArticleFragment.ARG_POSITION, position);
 //            newFragment.setArguments(args);
         } else if (id == R.id.nav_outfits) {
-
+            fragmentClass = new AlbumFragment().getClass();
             Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_pref) {
 
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity
 
 
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(null).commit();
 
 
         // Highlight the selected item has been done by NavigationView
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_ticket:
-//                fragmentClass = WardrobeFragment.class;
+//                fragmentClass = WardrobeCategoryFragment.class;
                 break;
 
             case R.id.nav_myTicket:
