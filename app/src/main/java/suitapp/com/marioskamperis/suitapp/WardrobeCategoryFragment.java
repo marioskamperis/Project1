@@ -2,6 +2,7 @@ package suitapp.com.marioskamperis.suitapp;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -101,9 +102,15 @@ public class WardrobeCategoryFragment extends Fragment {
                                 view.setAlpha(1);
                             }
                         });
+
                 Toast.makeText(getActivity(), "Clicked category " + AppConfig.CATEGORIES[position], Toast.LENGTH_SHORT).show();
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, new HomeFragment()).addToBackStack(null).commit();
+                if (AppConfig.CATEGORIES[position] == "Accessories") {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, new ItemFragment()).addToBackStack(null).commit();
+                } else {
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flContent, new HomeFragment()).addToBackStack(null).commit();
+                }
             }
 
         });
@@ -170,10 +177,16 @@ public class WardrobeCategoryFragment extends Fragment {
 
             TextView textView = (TextView) rowView.findViewById(R.id.wardrobe_clothing_element);
 
+
             TextView addElement = (TextView) rowView.findViewById(R.id.wardrobe_clothing_element_add);
 
 
+//            int imageresource = getResources().getIdentifier("@drawable/watch", null, getActivity().getPackageName());
             textView.setText(values.get(position));
+            if (values.get(position) == "Accessories") {
+//                textView.setBackground(getResources().getDrawable(getResources().getIdentifier("@drawable/watch", null, getActivity().getPackageName()));
+                textView.setBackgroundResource(R.drawable.watch_category);
+            }
 
             addElement.setTag(position);
             addElement.setOnClickListener(new View.OnClickListener() {

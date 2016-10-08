@@ -1,5 +1,9 @@
 package suitapp.com.marioskamperis.suitapp;
 
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -19,52 +23,57 @@ import java.util.List;
 /**
  * Created by Ravi Tamada on 18/05/16.
  */
-public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Album> albumList;
+    private List<Item> itemList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, count;
+        public TextView name;
+        //        public TextView  count;
         public ImageView thumbnail, overflow;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            name = (TextView) view.findViewById(R.id.wardrobe_item_name);
+//            count = (TextView) view.findViewById(R.id.count);
+            thumbnail = (ImageView) view.findViewById(R.id.wardrobe_item_thumbnail);
             thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "OK", Toast.LENGTH_SHORT).show();
+
+
+                    DialogFragment fragment;
+                    fragment = new ItemDialogFragment();
+                    ((Activity) mContext).getFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
+
                 }
             });
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            overflow = (ImageView) view.findViewById(R.id.wardrobe_item_overflow);
         }
     }
 
 
-    public AlbumAdapter(Context mContext, List<Album> albumList) {
+    public ItemAdapter(Context mContext, List<Item> itemList) {
         this.mContext = mContext;
-        this.albumList = albumList;
+        this.itemList = itemList;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.wardrobe_album_card, parent, false);
+                .inflate(R.layout.wardrobe_item_card, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
-    @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Album album = albumList.get(position);
-        holder.title.setText(album.getName());
-        holder.count.setText(album.getNumOfSongs() + " songs");
+        Item item = itemList.get(position);
+        holder.name.setText(item.getName());
+//        holder.count.setText(item.getNumOfSongs() + " songs");
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        Glide.with(mContext).load(item.getThumbnail()).into(holder.thumbnail);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +120,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return albumList.size();
+        return itemList.size();
     }
 }

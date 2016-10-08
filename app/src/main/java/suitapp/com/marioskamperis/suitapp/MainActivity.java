@@ -103,11 +103,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
             fragmentClass = (new HomeFragment()).getClass();
         } else if (id == R.id.nav_wardrobe) {
 
-            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
 //            fragmentClass = (new WardrobeCategoryFragment()).getClass();
 
             fragmentClass = new WardrobeCategoryFragment().getClass();
@@ -116,10 +116,10 @@ public class MainActivity extends AppCompatActivity
 //            newFragment.setArguments(args);
         } else if (id == R.id.nav_outfits) {
             fragmentClass = new AlbumFragment().getClass();
-            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_pref) {
-
-            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
+            fragmentClass = new ItemFragment().getClass();
+//            Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_profile) {
 
             Toast.makeText(getApplicationContext(), "Item Pressed", Toast.LENGTH_SHORT).show();

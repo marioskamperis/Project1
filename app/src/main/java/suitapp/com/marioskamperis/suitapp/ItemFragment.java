@@ -1,11 +1,11 @@
 package suitapp.com.marioskamperis.suitapp;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +29,7 @@ import java.util.List;
  * Use the {@link AlbumFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlbumFragment extends Fragment {
+public class ItemFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -41,10 +41,11 @@ public class AlbumFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
-    private AlbumAdapter adapter;
-    private List<Album> albumList;
+    private ItemAdapter adapter;
 
-    public AlbumFragment() {
+    private List<Item> itemList;
+
+    public ItemFragment() {
         // Required empty public constructor
     }
 
@@ -57,8 +58,8 @@ public class AlbumFragment extends Fragment {
      * @return A new instance of fragment AlbumFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AlbumFragment newInstance(String param1, String param2) {
-        AlbumFragment fragment = new AlbumFragment();
+    public static ItemFragment newInstance(String param1, String param2) {
+        ItemFragment fragment = new ItemFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -79,13 +80,13 @@ public class AlbumFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_album, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_item, container, false);
 
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.albums_recycler_view);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.items_recycler_view);
 
-        albumList = new ArrayList<>();
-        adapter = new AlbumAdapter(getActivity().getApplicationContext(), albumList);
+        itemList = new ArrayList<>();
+        adapter = new ItemAdapter(getActivity().getApplicationContext(), itemList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -93,8 +94,8 @@ public class AlbumFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlbums();
-
+        prepareItems();
+//
 //        try {
 //            Glide.with(this).load(R.drawable.cover).into((ImageView) rootView.findViewById(R.id.thumbnail));
 //        } catch (Exception e) {
@@ -179,7 +180,7 @@ public class AlbumFragment extends Fragment {
     /**
      * Adding few albums for testing
      */
-    private void prepareAlbums() {
+    private void prepareItems() {
         int[] covers = new int[]{
                 R.drawable.album1,
                 R.drawable.album2,
@@ -193,35 +194,35 @@ public class AlbumFragment extends Fragment {
                 R.drawable.album10,
                 R.drawable.album11};
 
-        Album a = new Album("True Romance", 13, covers[0]);
-        albumList.add(a);
+        Item a = new Item(1,"My rolex", R.drawable.rolex);
+        itemList.add(a);
 
-        a = new Album("Xscpae", 8, covers[1]);
-        albumList.add(a);
-
-        a = new Album("Maroon 5", 11, covers[2]);
-        albumList.add(a);
-
-        a = new Album("Born to Die", 12, covers[3]);
-        albumList.add(a);
-
-        a = new Album("Honeymoon", 14, covers[4]);
-        albumList.add(a);
-
-        a = new Album("I Need a Doctor", 1, covers[5]);
-        albumList.add(a);
-
-        a = new Album("Loud", 11, covers[6]);
-        albumList.add(a);
-
-        a = new Album("Legend", 14, covers[7]);
-        albumList.add(a);
-
-        a = new Album("Hello", 11, covers[8]);
-        albumList.add(a);
-
-        a = new Album("Greatest Hits", 17, covers[9]);
-        albumList.add(a);
+//        a = new Item("Xscpae", 8, covers[1]);
+//        itemList.add(a);
+//
+//        a = new Item("Maroon 5", 11, covers[2]);
+//        itemList.add(a);
+//
+//        a = new Item("Born to Die", 12, covers[3]);
+//        itemList.add(a);
+//
+//        a = new Item("Honeymoon", 14, covers[4]);
+//        itemList.add(a);
+//
+//        a = new Item("I Need a Doctor", 1, covers[5]);
+//        itemList.add(a);
+//
+//        a = new Item("Loud", 11, covers[6]);
+//        itemList.add(a);
+//
+//        a = new Item("Legend", 14, covers[7]);
+//        itemList.add(a);
+//
+//        a = new Item("Hello", 11, covers[8]);
+//        itemList.add(a);
+//
+//        a = new Item("Greatest Hits", 17, covers[9]);
+//        itemList.add(a);
 
         adapter.notifyDataSetChanged();
     }

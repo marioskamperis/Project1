@@ -10,16 +10,26 @@ public class Item {
     private String patterns;
     private String color;
     private Float price;
+    private int thumbnail;
+    private int photo;
 
     public Item() {
     }
 
-    public Item(int category, String name, String patterns, String color, Float price) {
+    public Item(int category, String name, String patterns, String color, Float price, int thumbnail, int photo) {
         this.category = category;
         this.name = name;
         this.patterns = patterns;
         this.color = color;
         this.price = price;
+        this.thumbnail = thumbnail;
+        this.photo = photo;
+    }
+
+    public Item(int category, String name, int thumbnail) {
+        this.category = category;
+        this.name = name;
+        this.thumbnail = thumbnail;
     }
 
     public int getCategory() {
@@ -60,5 +70,21 @@ public class Item {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public int getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(int thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public int getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(int photo) {
+        this.photo = photo;
     }
 }
