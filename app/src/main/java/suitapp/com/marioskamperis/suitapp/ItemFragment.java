@@ -1,11 +1,19 @@
 package suitapp.com.marioskamperis.suitapp;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +25,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +43,7 @@ public class ItemFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -86,7 +96,7 @@ public class ItemFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.items_recycler_view);
 
         itemList = new ArrayList<>();
-        adapter = new ItemAdapter(getActivity().getApplicationContext(), itemList);
+        adapter = new ItemAdapter(getActivity(), itemList);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -102,6 +112,13 @@ public class ItemFragment extends Fragment {
 //            e.printStackTrace();
 //        }
 
+        FloatingActionButton fabAdd = (FloatingActionButton) rootView.findViewById(R.id.fab_add_item);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
         return rootView;
     }
 
@@ -194,7 +211,7 @@ public class ItemFragment extends Fragment {
                 R.drawable.album10,
                 R.drawable.album11};
 
-        Item a = new Item(1,"My rolex", R.drawable.rolex);
+        Item a = new Item(1, "My rolex", R.drawable.rolex);
         itemList.add(a);
 
 //        a = new Item("Xscpae", 8, covers[1]);
@@ -271,5 +288,37 @@ public class ItemFragment extends Fragment {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+                // convert byte array to Bitmap
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
+                        byteArray.length);
+
+                Drawable d = new BitmapDrawable(getResources(),bitmap);
+
+                Item a = new Item(1, "My rolex", d.get);
+                itemList.add(a);
+
+
+            }
+        }
     }
 }

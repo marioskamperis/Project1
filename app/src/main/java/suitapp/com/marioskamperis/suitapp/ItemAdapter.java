@@ -5,8 +5,10 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,17 +40,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
             name = (TextView) view.findViewById(R.id.wardrobe_item_name);
 //            count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.wardrobe_item_thumbnail);
-            thumbnail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-
-                    DialogFragment fragment;
-                    fragment = new ItemDialogFragment();
-                    ((Activity) mContext).getFragmentManager().beginTransaction().replace(R.id.flContent, fragment).commit();
-
-                }
-            });
             overflow = (ImageView) view.findViewById(R.id.wardrobe_item_overflow);
         }
     }
@@ -74,11 +65,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
 
         // loading album cover using Glide library
         Glide.with(mContext).load(item.getThumbnail()).into(holder.thumbnail);
+        holder.thumbnail.setTag(item.getThumbnail());
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(holder.overflow);
+            }
+        });
+
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flContent, new ItemDialogFragment()).addToBackStack(null).commit();
             }
         });
     }

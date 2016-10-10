@@ -11,7 +11,7 @@ package suitapp.com.marioskamperis.suitapp;
 public class AppConfig {
 
     public static final String[] CATEGORIES =
-            {"Jacket", "Suit", "Shirt", "Trousers", "Shoes", "Accessories", "OuterWear"};
+            {/*"Jacket", "Suit", "Shirt", "Trousers", "Shoes", */"Accessories", "OuterWear"};
 //    // Server user login url
 ////    public static String URL_LOGIN = "http://192.168.1.3/protereotitapp/mobile_login.php";
 //    public static String URL_LOGIN = "http://marioskamperis.ddns.net/protereotitapp/mobile_login.php";
