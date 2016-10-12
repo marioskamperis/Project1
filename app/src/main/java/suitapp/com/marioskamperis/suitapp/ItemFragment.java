@@ -314,8 +314,8 @@ public class ItemFragment extends Fragment {
 
                 Drawable d = new BitmapDrawable(getResources(),bitmap);
 
-                Item a = new Item(1, "My rolex", d.get);
-                itemList.add(a);
+//                Item a = new Item(1, "My rolex", d.get);
+//                itemList.add(a);
 
 
             }
