@@ -127,7 +127,7 @@ public class ItemFragment extends Fragment {
         for (int i = 0; i < tempList.size(); i++) {
             itemList.add(tempList.get(i));
         }
-        Log.d("ItemFragmentList :", itemList.toString());
+        Log.d("Debug :", itemList.toString());
         adapter.notifyDataSetChanged();
 
 
@@ -335,9 +335,9 @@ public class ItemFragment extends Fragment {
 
                 //create
                 itemDao.create(newItem);
-                Log.d("ItemFragment Item :", newItem.toString());
+                Log.d("Debug Item :", newItem.toString());
                 itemList.add(newItem);
-                Log.d("ItemFragmentList :", itemList.toString());
+                Log.d("Debug :", itemList.toString());
                 adapter.notifyDataSetChanged();
 
             }

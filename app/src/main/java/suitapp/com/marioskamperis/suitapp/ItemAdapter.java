@@ -81,7 +81,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
                 int id = (int) holder.thumbnail.getTag();
-                fragmentManager.beginTransaction().replace(R.id.flContent, new ItemDialogFragment().newInstance(id)).addToBackStack(null).commit();
+                Log.d("Debug", "ID in ItemAdapter" + id);
+                ItemDialogFragment a = new ItemDialogFragment();
+                DialogFragment dialogFragment = ItemDialogFragment.newInstance(id);
+                fragmentManager.beginTransaction().replace(R.id.flContent, dialogFragment).addToBackStack(null).commit();
             }
         });
     }
