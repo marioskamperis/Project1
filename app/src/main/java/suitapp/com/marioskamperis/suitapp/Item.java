@@ -1,35 +1,81 @@
 package suitapp.com.marioskamperis.suitapp;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+import java.util.Arrays;
+import java.util.Date;
+
 /**
  * Created by Marios on 10/2/2016.
  */
+
+@DatabaseTable(tableName = "items")
 public class Item {
 
+    @DatabaseField(generatedId = true)
+    private int id;
+
+    @DatabaseField
     private int category;
+
+    @DatabaseField
     private String name;
+
+    @DatabaseField
     private String patterns;
+
+    @DatabaseField
     private String color;
+
+    @DatabaseField
     private Float price;
+
+    @DatabaseField(dataType = DataType.BYTE_ARRAY)
+    byte[] image;
+
+    @DatabaseField
+    private Date created;
+
+    protected static int counterId = 0;
+
     private int thumbnail;
-    private int photo;
+
 
     public Item() {
+        this.id = counterId++;
     }
 
-    public Item(int category, String name, String patterns, String color, Float price, int thumbnail, int photo) {
+    public Item(int category, String name, String patterns, String color, Float price, byte[] image, Date created) {
+        this.id = counterId++;
         this.category = category;
         this.name = name;
         this.patterns = patterns;
         this.color = color;
         this.price = price;
-        this.thumbnail = thumbnail;
-        this.photo = photo;
+        this.image = image;
+        this.created = new Date(System.currentTimeMillis());
     }
 
-    public Item(int category, String name, int thumbnail) {
-        this.category = category;
+    public Item(String name) {
+        this.id = counterId++;
         this.name = name;
-        this.thumbnail = thumbnail;
+    }
+
+    public Item(String name, byte[] image) {
+        this.id = counterId++;
+        this.name = name;
+        this.image = image;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+
+    public static int getCounterId() {
+        return counterId;
     }
 
     public int getCategory() {
@@ -72,6 +118,14 @@ public class Item {
         this.price = price;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
     public int getThumbnail() {
         return thumbnail;
     }
@@ -80,11 +134,17 @@ public class Item {
         this.thumbnail = thumbnail;
     }
 
-    public int getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(int photo) {
-        this.photo = photo;
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", category=" + category +
+                ", name='" + name + '\'' +
+                ", patterns='" + patterns + '\'' +
+                ", color='" + color + '\'' +
+                ", price=" + price +
+                ", image=" + Arrays.toString(image) +
+                ", created=" + created +
+                '}';
     }
 }

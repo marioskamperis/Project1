@@ -61,11 +61,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Item item = itemList.get(position);
         holder.name.setText(item.getName());
+
 //        holder.count.setText(item.getNumOfSongs() + " songs");
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(item.getThumbnail()).into(holder.thumbnail);
-        holder.thumbnail.setTag(item.getThumbnail());
+        Glide.with(mContext).load(item.getImage()).into(holder.thumbnail);
+        holder.thumbnail.setTag(item.getId());
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +80,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((Activity) mContext).getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.flContent, new ItemDialogFragment()).addToBackStack(null).commit();
+                int id = (int) holder.thumbnail.getTag();
+                fragmentManager.beginTransaction().replace(R.id.flContent, new ItemDialogFragment().newInstance(id)).addToBackStack(null).commit();
             }
         });
     }

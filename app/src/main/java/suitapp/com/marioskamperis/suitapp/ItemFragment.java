@@ -17,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+import com.j256.ormlite.table.TableUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +59,9 @@ public class ItemFragment extends Fragment {
     private ItemAdapter adapter;
 
     private List<Item> itemList;
+
+    private DatabaseHelper dbHelper;
+    private RuntimeExceptionDao<Item, Integer> itemDao;
 
     public ItemFragment() {
         // Required empty public constructor
@@ -104,13 +112,25 @@ public class ItemFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareItems();
-//
+        //get DB
+        dbHelper = OpenHelperManager.getHelper(getActivity().getApplicationContext(), DatabaseHelper.class);
+        itemDao = dbHelper.getItemRuntimeDao();
+
+//        //Delete Items
 //        try {
-//            Glide.with(this).load(R.drawable.cover).into((ImageView) rootView.findViewById(R.id.thumbnail));
-//        } catch (Exception e) {
+//            TableUtils.clearTable(dbHelper.getConnectionSource(),Item.class);
+//        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
+
+        List<Item> tempList = itemDao.queryForAll();
+        for (int i = 0; i < tempList.size(); i++) {
+            itemList.add(tempList.get(i));
+        }
+        Log.d("ItemFragmentList :", itemList.toString());
+        adapter.notifyDataSetChanged();
+
+
 
         FloatingActionButton fabAdd = (FloatingActionButton) rootView.findViewById(R.id.fab_add_item);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -197,23 +217,23 @@ public class ItemFragment extends Fragment {
     /**
      * Adding few albums for testing
      */
-    private void prepareItems() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        Item a = new Item(1, "My rolex", R.drawable.rolex);
-        itemList.add(a);
-
+//    private void prepareItems() {
+//        int[] covers = new int[]{
+//                R.drawable.album1,
+//                R.drawable.album2,
+//                R.drawable.album3,
+//                R.drawable.album4,
+//                R.drawable.album5,
+//                R.drawable.album6,
+//                R.drawable.album7,
+//                R.drawable.album8,
+//                R.drawable.album9,
+//                R.drawable.album10,
+//                R.drawable.album11};
+//
+//        Item a = new Item(1, "My rolex", R.drawable.rolex);
+//        itemList.add(a);
+//
 //        a = new Item("Xscpae", 8, covers[1]);
 //        itemList.add(a);
 //
@@ -240,9 +260,9 @@ public class ItemFragment extends Fragment {
 //
 //        a = new Item("Greatest Hits", 17, covers[9]);
 //        itemList.add(a);
-
-        adapter.notifyDataSetChanged();
-    }
+//
+//        adapter.notifyDataSetChanged();
+//    }
 
     /**
      * RecyclerView item decoration - give equal margin around grid item
@@ -296,6 +316,7 @@ public class ItemFragment extends Fragment {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -307,16 +328,17 @@ public class ItemFragment extends Fragment {
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
 
-                // convert byte array to Bitmap
 
-                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
-                        byteArray.length);
+                Item newItem = new Item();
+                newItem.setName("Picture" + (newItem.getCounterId()));
+                newItem.setImage(byteArray);
 
-                Drawable d = new BitmapDrawable(getResources(),bitmap);
-
-//                Item a = new Item(1, "My rolex", d.get);
-//                itemList.add(a);
-
+                //create
+                itemDao.create(newItem);
+                Log.d("ItemFragment Item :", newItem.toString());
+                itemList.add(newItem);
+                Log.d("ItemFragmentList :", itemList.toString());
+                adapter.notifyDataSetChanged();
 
             }
         }
